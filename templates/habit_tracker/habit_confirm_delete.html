@@ -1,0 +1,14 @@
+{% extends 'habit_tracker/base.html' %}
+{% block content %}
+<div class="card shadow-sm mx-auto mt-5" style="max-width: 400px;">
+    <div class="card-body text-center">
+        <h1 class="h4 mb-3 text-danger">Delete Habit</h1>
+        <p>Are you sure you want to delete the habit <strong>"{{ habit.title }}"</strong>?</p>
+        <form method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <a href="{% url 'habit_detail' habit.id %}" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
+</div>
+{% endblock content %}

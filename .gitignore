@@ -1,0 +1,33 @@
+# Virtual environment
+habitvenv/
+.venv/
+env/
+venv/
+
+# Byte-code files
+*.pyc
+__pycache__/
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs and databases
+*.log
+*.sqlite3
+db.sqlite3
+
+# Uploaded Media (if applicable)
+media/
+
+# dotenv files
+.env
+
+# Jupyter Notebook checkpoint files
+.ipynb_checkpoints/

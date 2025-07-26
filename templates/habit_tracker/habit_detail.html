@@ -1,0 +1,76 @@
+{% extends 'habit_tracker/base.html' %}
+{% block content %}
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h1 class="h3 mb-0">{{ habit.title }}</h1>
+            <div>
+                <a href="{% url 'habit_edit' habit.id %}" class="btn btn-primary btn-sm">Edit</a>
+                <a href="{% url 'habit_delete' habit.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+            </div>
+        </div>
+        {% if habit.description %}
+            <p class="mb-2">{{ habit.description }}</p>
+        {% endif %}
+        <p class="text-muted mb-1">Created at: {{ habit.created_at|date:'Y-m-d' }}</p>
+        <span class="badge bg-info text-dark me-2">Current streak: {{ habit.current_streak }} days</span>
+        <span class="badge bg-secondary">Longest streak: {{ habit.longest_streak }} days</span>
+
+        <h2 class="h5 mt-4">Calendar</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered text-center w-auto mx-auto mb-4">
+                <tr class="table-light">
+                    <th>Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                </tr>
+                {% for week in month_calendar %}
+                <tr>
+                    {% for day, status in week %}
+                        <td class="align-middle {% if day.month != habit.created_at.month %}bg-light{% endif %}">
+                            {% if day.month != habit.created_at.month %}
+                                <!-- Not this month -->
+                            {% elif status is none %}
+                                <!-- No entry -->
+                            {% elif status %}
+                                <span class="text-success fs-5">✅</span>
+                            {% else %}
+                                <span class="text-danger fs-5">❌</span>
+                            {% endif %}
+                            <div class="small text-muted">{{ day.day }}</div>
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <h2 class="h5 mt-4">History</h2>
+        <ul class="list-group mb-4">
+            {% for entry in history %}
+                <li class="list-group-item">
+                    {% if entry.status %}<span class="text-success">✅</span>{% else %}<span class="text-danger">❌</span>{% endif %}
+                    {{ entry.timestamp|date:"Y-m-d H:i" }}
+                </li>
+            {% empty %}
+                <li class="list-group-item">No history yet.</li>
+            {% endfor %}
+        </ul>
+
+        <form method="post" action="{% url 'habit_mark_complete' habit.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Mark as Completed</button>
+        </form>
+        <form method="post" action="{% url 'habit_mark_incomplete' habit.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Mark as Not Completed</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+
